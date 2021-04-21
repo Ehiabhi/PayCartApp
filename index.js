@@ -57,7 +57,7 @@ app.post("/", (req, res) => {
   });
 });
 
-const port = process.env.port || 9000;
+const port = process.env.PORT || 9000;
 app.listen(port, function (req, res) {
   console.log("Server started at port " + port);
 });
