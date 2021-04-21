@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const steps = ["Basic Info", "Payment Breakdown"];
+const steps = ["Basic Info", "Payment Breakdown", "Review Application"];
 
 function getStepContent(step) {
   switch (step) {
@@ -80,6 +80,8 @@ const PreapprovalPage1 = () => {
   const [buttonStateForBaseInfo, setButtonStateForBaseInfo] = React.useState(
     true
   );
+  const [bdpbutton, setbdpbutton] = React.useState(true);
+  const [bdpContinueButton, setbdpContinueButton] = React.useState(true);
   const [buttonStateForPay, setButtonStateForPay] = React.useState(true);
 
   const [loanApprovalData, setLoanApprovalData] = React.useState({
@@ -153,6 +155,9 @@ const PreapprovalPage1 = () => {
             });
           }
         })
+        .then(() => {
+          document.getElementById("submitButton").style.display = "none";
+        })
         .catch((err) => {
           console.log(err);
         });
@@ -160,17 +165,18 @@ const PreapprovalPage1 = () => {
   };
 
   const handleBack = () => {
+    setbdpbutton(true);
+    setbdpContinueButton(true);
+    setformData({
+      payplan: "",
+      downpayment: "",
+    });
     setButtonStateForBaseInfo(true);
     if (steps[activeStep] === "Payment Breakdown") {
       setBasicInfo((prevState) => {
         return { ...prevState, workstatus: "", loan: "" };
       });
     }
-    // if (steps[activeStep] === "Payment Breakdown") {
-    //   setformData((prevState) => {
-    //     return { ...prevState, payplan: "" };
-    //   });
-    // }
     setActiveStep(activeStep - 1);
   };
 
@@ -183,6 +189,10 @@ const PreapprovalPage1 = () => {
         setformData,
         setButtonStateForPay,
         setLoanApprovalData,
+        loanApprovalData,
+        bdpbutton,
+        setbdpbutton,
+        setbdpContinueButton,
       }}
     >
       <React.Fragment>
@@ -211,17 +221,18 @@ const PreapprovalPage1 = () => {
               Back
             </Button>
           )}
-          {/* {activeStep !== 0 && (
+          {activeStep !== 0 && (
             <Button
+              id="submitButton"
               style={{
-                display: steps[activeStep] !== "Basic Info" && "none",
+                display: steps[activeStep] !== "Review Application" && "none",
               }}
               onClick={handleBack}
               className={classes.button}
             >
               Back
             </Button>
-          )} */}
+          )}
           <Button
             style={{ display: steps[activeStep] !== "Basic Info" && "none" }}
             disabled={buttonStateForBaseInfo}
@@ -236,7 +247,18 @@ const PreapprovalPage1 = () => {
             style={{
               display: steps[activeStep] !== "Payment Breakdown" && "none",
             }}
-            disabled={buttonStateForPay}
+            disabled={buttonStateForPay || bdpContinueButton}
+            variant="contained"
+            color="primary"
+            onClick={handleNext}
+            className={classes.button}
+          >
+            {activeStep === steps.length - 1 ? "Submit" : "Continue"}
+          </Button>
+          <Button
+            style={{
+              display: steps[activeStep] !== "Review Application" && "none",
+            }}
             variant="contained"
             color="primary"
             onClick={handleNext}

@@ -70,6 +70,9 @@ const PaymentBreakdown = () => {
     basicInfo,
     setButtonStateForPay,
     setLoanApprovalData,
+    bdpbutton,
+    setbdpbutton,
+    setbdpContinueButton,
   } = useContext(globalVar);
   const classes = useStyles();
   const [payBreakDown, setPayBreakDown] = React.useState({
@@ -78,7 +81,6 @@ const PaymentBreakdown = () => {
     MonthlyInstallment: null,
     Tenure: null,
   });
-  const [bdpbutton, setbdpbutton] = React.useState(true);
   const [error, setError] = React.useState({
     status: false,
     message: null,
@@ -112,6 +114,7 @@ const PaymentBreakdown = () => {
   }, [formData.downpayment, basicInfo.totalCartValue]);
 
   const handleInputChange = (e) => {
+    setbdpContinueButton(true);
     const name = e.target.name;
     const value = e.target.value;
     const stateDownPay = {
@@ -133,6 +136,7 @@ const PaymentBreakdown = () => {
 
   const submit = (e) => {
     e.preventDefault();
+    setbdpContinueButton(false);
     const totalCartValue = Number(basicInfo.totalCartValue);
     const downPayment = Number(formData.downpayment);
     const shoppingCredit = totalCartValue - downPayment;
@@ -289,7 +293,6 @@ const PaymentBreakdown = () => {
                               >
                                 <TextField
                                   type="number"
-                                  // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                                   error={error.status}
                                   helperText={error.message}
                                   id="downPay"

@@ -1,6 +1,6 @@
 import React from "react";
 import PreapprovalPage1 from "./components/PreapprovalPage1";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
